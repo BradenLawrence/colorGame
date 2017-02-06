@@ -1,13 +1,19 @@
 let box = []
 const colorButton = function(display) {
     this.display = display
-    this.red = Math.floor(Math.random() * 255)
-    this.green = Math.floor(Math.random() * 255)
-    this.blue = Math.floor(Math.random() * 255)
+    this.red = null
+    this.green = null
+    this.blue = null
     this.color = function() {
         return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
     }
-    this.display.style.backgroundColor = this.color()
+    this.scramble = function() {
+      this.red = Math.floor(Math.random() * 255)
+      this.green = Math.floor(Math.random() * 255)
+      this.blue = Math.floor(Math.random() * 255)
+      this.display.style.backgroundColor = this.color()
+    }
+    this.scramble()
     this.showHide = function() {
         this.display.classList.toggle("hidden")
     }
@@ -30,4 +36,13 @@ targetNum.updateDisplay = function() {
     this.redDisplay.textContent = this.red
     this.greenDisplay.textContent = this.green
     this.blueDisplay.textContent = this.blue
+}
+
+targetNum.color = function() {
+    return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
+}
+
+const randomBox = function(array) {
+    let num = Math.floor(Math.random() * array.length)
+    return array[num]
 }
