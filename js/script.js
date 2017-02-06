@@ -42,6 +42,10 @@ targetNum.color = function() {
     return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
 }
 
+targetNum.colorBox = function(item) {
+    item.display.style.backgroundColor = this.color()
+}
+
 const randomBox = function(array) {
     let num = Math.floor(Math.random() * array.length)
     return array[num]
