@@ -23,28 +23,36 @@ for (let i = 0; i < 6; i++) {
     box[i] = new colorButton(document.querySelector("#c" + i))
 }
 
-let targetNum = {
-    red: Math.floor(Math.random() * 255),
-    redDisplay: document.querySelector("#redCode"),
-    green: Math.floor(Math.random() * 255),
-    greenDisplay: document.querySelector("#greenCode"),
-    blue: Math.floor(Math.random() * 255),
-    blueDisplay: document.querySelector("#blueCode")
-}
-
-targetNum.updateDisplay = function() {
+const targetNum = function(redDisplay, greenDisplay, blueDisplay) {
+  this.red = null
+  this.redDisplay = redDisplay
+  this.green = null
+  this.greenDisplay = greenDisplay
+  this.blue = null
+  this.blueDisplay = blueDisplay
+  this.color = function() {
+      return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
+  }
+  this.updateDisplay = function() {
     this.redDisplay.textContent = this.red
     this.greenDisplay.textContent = this.green
     this.blueDisplay.textContent = this.blue
+  }
+  this.scramble = function() {
+    this.red = Math.floor(Math.random() * 255)
+    this.green = Math.floor(Math.random() * 255)
+    this.blue = Math.floor(Math.random() * 255)
+    this.updateDisplay()
+  }
+  this.scramble()
+  this.colorBox = function(item) {
+      item.display.style.backgroundColor = this.color()
+  }
 }
 
-targetNum.color = function() {
-    return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
-}
-
-targetNum.colorBox = function(item) {
-    item.display.style.backgroundColor = this.color()
-}
+let myTargetNum = new targetNum(document.querySelector("#redCode"),
+                                document.querySelector("#greenCode"),
+                                document.querySelector("#blueCode"))
 
 const randomBox = function(array) {
     let num = Math.floor(Math.random() * array.length)
