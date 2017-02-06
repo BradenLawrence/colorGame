@@ -1,16 +1,33 @@
 let box = []
-const colorButton = function(location) {
-    this.location = location
+const colorButton = function(display) {
+    this.display = display
     this.red = Math.floor(Math.random() * 255)
     this.green = Math.floor(Math.random() * 255)
     this.blue = Math.floor(Math.random() * 255)
-    this.color = function(){
+    this.color = function() {
         return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
     }
-    this.location.style.backgroundColor = this.color()
-    this.visible = true
+    this.display.style.backgroundColor = this.color()
+    this.showHide = function() {
+        this.display.classList.toggle("hidden")
     }
+}
 
-for(i=0; i<5; i++){
-  box[i] = new colorButton(document.querySelector("#c" + i))
+for (let i = 0; i < 6; i++) {
+    box[i] = new colorButton(document.querySelector("#c" + i))
+}
+
+let targetNum = {
+    red: Math.floor(Math.random() * 255),
+    redDisplay: document.querySelector("#redCode"),
+    green: Math.floor(Math.random() * 255),
+    greenDisplay: document.querySelector("#greenCode"),
+    blue: Math.floor(Math.random() * 255),
+    blueDisplay: document.querySelector("#blueCode")
+}
+
+targetNum.updateDisplay = function() {
+    this.redDisplay.textContent = this.red
+    this.greenDisplay.textContent = this.green
+    this.blueDisplay.textContent = this.blue
 }
