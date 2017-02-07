@@ -9,6 +9,7 @@ const boxClicked = function() {
     console.log("Correct!")
   } else {
     console.log("Incorrect!")
+    this.hide()
   }
 }
 
@@ -39,8 +40,11 @@ const colorButton = function(name, display) {
       this.updateDisplay()
     }
     this.scramble()
-    this.showHide = function() {
-        this.display.classList.toggle("hidden")
+    this.hide = function() {
+        this.display.classList.add("hidden")
+    }
+    this.show = function() {
+        this.display.classList.remove("hidden")
     }
     this.display.addEventListener("click", boxClicked.bind(this))
 }
