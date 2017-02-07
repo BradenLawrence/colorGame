@@ -3,14 +3,34 @@ let box = []
 
 // Click handler for when an onscreen box is clicked
 const boxClicked = function() {
-  console.log(this.name + ": " + this.color())
-  console.log("Target: " + myTargetNum.color())
-  if(this.color() === myTargetNum.color()) {
-    console.log("Correct!")
-  } else {
-    console.log("Incorrect!")
-    this.hide()
-  }
+    console.log(this.name + ": " + this.color())
+    console.log("Target: " + myTargetNum.color())
+    if (this.color() === myTargetNum.color()) {
+        console.log("Correct!")
+        resetGame()
+    } else {
+        console.log("Incorrect!")
+        this.hide()
+    }
+}
+
+const rerollColors = function(array) {
+    for (let i = 0; i < array.length; i++) {
+        array[i].scramble()
+    }
+}
+
+const revealAll = function(array) {
+    for (let i = 0; i < array.length; i++) {
+        array[i].show()
+    }
+}
+
+const resetGame = function() {
+    rerollColors(box)
+    myTargetNum.scramble()
+    myTargetNum.colorBox(randomBox(box))
+    revealAll(box)
 }
 
 // Function to let us select a box at random.
@@ -31,13 +51,13 @@ const colorButton = function(name, display) {
         return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
     }
     this.updateDisplay = function() {
-      this.display.style.backgroundColor = this.color()
+        this.display.style.backgroundColor = this.color()
     }
     this.scramble = function() {
-      this.red = Math.floor(Math.random() * 255)
-      this.green = Math.floor(Math.random() * 255)
-      this.blue = Math.floor(Math.random() * 255)
-      this.updateDisplay()
+        this.red = Math.floor(Math.random() * 255)
+        this.green = Math.floor(Math.random() * 255)
+        this.blue = Math.floor(Math.random() * 255)
+        this.updateDisplay()
     }
     this.scramble()
     this.hide = function() {
@@ -56,39 +76,39 @@ for (let i = 0; i < 6; i++) {
 
 // Definition for the color number players will compare the boxes to
 const targetNum = function(redDisplay, greenDisplay, blueDisplay) {
-  this.red = null
-  this.redDisplay = redDisplay
-  this.green = null
-  this.greenDisplay = greenDisplay
-  this.blue = null
-  this.blueDisplay = blueDisplay
-  this.color = function() {
-      return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
-  }
-  this.updateDisplay = function() {
-    this.redDisplay.textContent = this.red
-    this.greenDisplay.textContent = this.green
-    this.blueDisplay.textContent = this.blue
-  }
-  this.scramble = function() {
-    this.red = Math.floor(Math.random() * 255)
-    this.green = Math.floor(Math.random() * 255)
-    this.blue = Math.floor(Math.random() * 255)
-    this.updateDisplay()
-  }
-  this.scramble()
-  this.colorBox = function(item) {
-      item.red = this.red
-      item.green = this.green
-      item.blue = this.blue
-      item.updateDisplay()
-  }
+    this.red = null
+    this.redDisplay = redDisplay
+    this.green = null
+    this.greenDisplay = greenDisplay
+    this.blue = null
+    this.blueDisplay = blueDisplay
+    this.color = function() {
+        return "rgb(" + this.red + "," + this.green + "," + this.blue + ")"
+    }
+    this.updateDisplay = function() {
+        this.redDisplay.textContent = this.red
+        this.greenDisplay.textContent = this.green
+        this.blueDisplay.textContent = this.blue
+    }
+    this.scramble = function() {
+        this.red = Math.floor(Math.random() * 255)
+        this.green = Math.floor(Math.random() * 255)
+        this.blue = Math.floor(Math.random() * 255)
+        this.updateDisplay()
+    }
+    this.scramble()
+    this.colorBox = function(item) {
+        item.red = this.red
+        item.green = this.green
+        item.blue = this.blue
+        item.updateDisplay()
+    }
 }
 
 // Defining the three onscreen numbers as the target number
 let myTargetNum = new targetNum(document.querySelector("#redCode"),
-                                document.querySelector("#greenCode"),
-                                document.querySelector("#blueCode"))
+    document.querySelector("#greenCode"),
+    document.querySelector("#blueCode"))
 
 // Recolors one of the boxes onscreen to match the target number
 myTargetNum.colorBox(randomBox(box))
