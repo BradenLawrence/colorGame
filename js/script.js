@@ -1,5 +1,14 @@
 let box = []
-const colorButton = function(display) {
+
+
+const boxClicked = function(e) {
+  console.log("Hi, this is " + this.name + "!")
+}
+
+const colorButton = function(name, id, display) {
+    let _this = this
+    this.name = name
+    this.id = id
     this.display = display
     this.red = null
     this.green = null
@@ -17,10 +26,11 @@ const colorButton = function(display) {
     this.showHide = function() {
         this.display.classList.toggle("hidden")
     }
+    this.display.addEventListener("click", boxClicked.bind(this))
 }
 
 for (let i = 0; i < 6; i++) {
-    box[i] = new colorButton(document.querySelector("#c" + i))
+    box[i] = new colorButton("box" + i, "c" + i, document.querySelector("#c" + i))
 }
 
 const targetNum = function(redDisplay, greenDisplay, blueDisplay) {
@@ -58,3 +68,5 @@ const randomBox = function(array) {
     let num = Math.floor(Math.random() * array.length)
     return array[num]
 }
+
+myTargetNum.colorBox(randomBox(box))
