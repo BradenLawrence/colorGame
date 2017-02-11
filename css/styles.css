@@ -35,7 +35,38 @@ h2 {
     margin-bottom: -22px;
     font-size: 2.5em;
     font-weight: bold;
+    text-align: center;
 }
+
+.difficultyBtn {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: -22px;
+}
+
+@media(max-width:767px) {
+    /*Bootstrap XS size*/
+    .difficultyBtn {
+      margin-top: 5px;
+      margin-bottom: 5px
+    }
+}
+
+@media(min-width:992px){
+    .difficultyBtn {
+        text-align: right;
+    }
+}
+
+.btn {
+  font-size: 1.25em;
+  width: 100px;
+}
+
+.btn-active {
+    box-shadow: 0 0 0pt 2pt white;
+}
+
 
 .content {
     margin-top: 60px;
@@ -65,5 +96,5 @@ h2 {
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
