@@ -1,18 +1,11 @@
 // Array that will hold our onscreen boxes
-let box = []
+let allBoxes = []
 
 // Function to let us select a box at random.
 // Will be used to turn one of the boxes into the correct answer.
 const randomBox = function(array) {
     let num = Math.floor(Math.random() * array.length)
     return array[num]
-}
-
-// Hide all boxes. The boxes that will be visible are controlled by the difficulty setting
-const hideBoxes = function(array) {
-    for(let i = 0; i < array.length; i++) {
-        array[i].hide()
-    }
 }
 
 // Definition for the color boxes
@@ -70,16 +63,24 @@ const revealAll = function(array) {
 }
 
 const resetGame = function() {
-    rerollColors(box)
+    rerollColors(difficulty.current.boxes)
     myTargetNum.scramble()
-    myTargetNum.colorBox(randomBox(box))
-    revealAll(box)
+    myTargetNum.colorBox(randomBox(difficulty.current.boxes))
+    revealAll(difficulty.current.boxes)
 }
 
 // Declare the onscreen boxes as colorButtons, based on our definition
 for (let i = 0; i < 6; i++) {
-    box[i] = new colorButton("box" + i, document.querySelector("#c" + i))
+    allBoxes[i] = new colorButton("box" + i, document.querySelector("#c" + i))
 }
+
+// Hide all boxes. The boxes that will be visible are controlled by the difficulty setting
+const hideBoxes = function(array) {
+    for(let i = 0; i < array.length; i++) {
+        array[i].hide()
+    }
+}
+hideBoxes(allBoxes)
 
 // Create difficulty buttons
 let difficulty = {
@@ -87,34 +88,60 @@ let difficulty = {
       easy: {
           displayBtn: document.querySelector("#easyBtn"),
           activate: function() {
-              difficulty.current = this.displayBtn
+              hideBoxes(allBoxes)
+              difficulty.current = this
               this.displayBtn.classList.add("btn-primary")
               difficulty.normal.displayBtn.classList.remove("btn-primary")
-          }
+              revealAll(this.boxes)
+          },
+          deactivate: function() {
+              this.displayBtn.classList.remove("btn-primary")
+          },
+          max: 3,
+          boxes: []
       },
       normal: {
           displayBtn: document.querySelector("#normalBtn"),
           activate: function() {
-              difficulty.current = this.displayBtn
+              hideBoxes(allBoxes)
+              difficulty.current = this
               this.displayBtn.classList.add("btn-primary")
-              difficulty.easy.displayBtn.classList.remove("btn-primary")
-          }
+              revealAll(this.boxes)
+          },
+          deactivate: function() {
+              this.displayBtn.classList.remove("btn-primary")
+          },
+          max: 6,
+          boxes: []
       }
     }
 
 const difficultyClicked = function(x) {
-  if(x.target !== difficulty.current) {   // If the button you clicked is not already active
+  if(x.target !== difficulty.current.displayBtn) {   // If the button you clicked is not already active
       if(x.target === difficulty.easy.displayBtn) {
           difficulty.easy.activate()
+          difficulty.normal.deactivate()
       } else if(x.target === difficulty.normal.displayBtn) {
           difficulty.normal.activate()
+          difficulty.easy.deactivate()
       }
+      resetGame()
   }
 }
 
 difficulty.easy.displayBtn.addEventListener("click", difficultyClicked)
 difficulty.normal.displayBtn.addEventListener("click", difficultyClicked)
+
+const assignBoxes = function(allBoxes, difficultyObject) {
+    for(let i=0; i<difficultyObject.max; i++) {
+        difficultyObject.boxes[i] = allBoxes[i]
+    }
+}
+assignBoxes(allBoxes, difficulty.easy)
+assignBoxes(allBoxes, difficulty.normal)
+
 difficulty.normal.activate()     // Game defaults to normal difficulty
+
 
 // Definition for the color number players will compare the boxes to
 const targetNum = function(redDisplay, greenDisplay, blueDisplay) {
@@ -153,4 +180,4 @@ let myTargetNum = new targetNum(document.querySelector("#redCode"),
                                 document.querySelector("#blueCode"))
 
 // Recolors one of the boxes onscreen to match the target number
-myTargetNum.colorBox(randomBox(box))
+myTargetNum.colorBox(randomBox(difficulty.current.boxes))
