@@ -52,12 +52,6 @@ h2 {
     }
 }
 
-@media(min-width:992px){
-    .difficultyBtn {
-        text-align: right;
-    }
-}
-
 .btn {
   font-size: 1.25em;
   width: 100px;
