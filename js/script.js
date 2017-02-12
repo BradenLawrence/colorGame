@@ -8,6 +8,13 @@ const randomBox = function(array) {
     return array[num]
 }
 
+// Hide all boxes. The boxes that will be visible are controlled by the difficulty setting
+const hideBoxes = function(array) {
+    for(let i = 0; i < array.length; i++) {
+        array[i].hide()
+    }
+}
+
 // Definition for the color boxes
 const colorButton = function(name, display) {
     this.name = name
