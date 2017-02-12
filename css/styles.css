@@ -79,8 +79,14 @@ h3 {
 
 
 .content {
-    margin-top: 60px;
-    /*height: 40%;*/
+    margin-top: 30px;
+}
+
+@media(max-width:767px) {
+    /*Bootstrap XS size*/
+    .content {
+      margin-top: -25px;
+    }
 }
 
 .colorBox {
