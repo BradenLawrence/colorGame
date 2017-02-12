@@ -44,9 +44,11 @@ const boxClicked = function() {
     if (this.color() === myTargetNum.color()) {
         console.log("Correct!")
         resetGame()
+        streak.add(1)
     } else {
         console.log("Incorrect!")
         this.hide()
+        streak.reset()
     }
 }
 
@@ -93,6 +95,7 @@ let difficulty = {
               this.displayBtn.classList.add("btn-primary")
               difficulty.normal.displayBtn.classList.remove("btn-primary")
               revealAll(this.boxes)
+              streak.reset()
           },
           deactivate: function() {
               this.displayBtn.classList.remove("btn-primary")
@@ -107,6 +110,7 @@ let difficulty = {
               difficulty.current = this
               this.displayBtn.classList.add("btn-primary")
               revealAll(this.boxes)
+              streak.reset()
           },
           deactivate: function() {
               this.displayBtn.classList.remove("btn-primary")
@@ -139,9 +143,6 @@ const assignBoxes = function(allBoxes, difficultyObject) {
 }
 assignBoxes(allBoxes, difficulty.easy)
 assignBoxes(allBoxes, difficulty.normal)
-
-difficulty.normal.activate()     // Game defaults to normal difficulty
-
 
 // Definition for the color number players will compare the boxes to
 const targetNum = function(redDisplay, greenDisplay, blueDisplay) {
@@ -178,6 +179,28 @@ const targetNum = function(redDisplay, greenDisplay, blueDisplay) {
 let myTargetNum = new targetNum(document.querySelector("#redCode"),
                                 document.querySelector("#greenCode"),
                                 document.querySelector("#blueCode"))
+
+// Create winning streak tracker
+let streak = {
+    value: null,
+    displayNum: document.querySelector("#streakNum"),
+    update: function() {
+        this.displayNum.textContent = this.value
+    },
+    add: function(x) {
+        this.value += x
+        this.update()
+        return this.value
+    },
+    reset: function() {
+        this.value = 0
+        this.update()
+        return this.value
+    }
+}
+
+// Game defaults to normal difficulty
+difficulty.normal.activate()
 
 // Recolors one of the boxes onscreen to match the target number
 myTargetNum.colorBox(randomBox(difficulty.current.boxes))
