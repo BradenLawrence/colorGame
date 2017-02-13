@@ -21,13 +21,24 @@ const colorButton = function(name, display) {
     this.updateDisplay = function() {
         this.display.style.backgroundColor = this.color()
     }
-    this.scramble = function() {
-        this.red = Math.floor(Math.random() * 255)
-        this.green = Math.floor(Math.random() * 255)
-        this.blue = Math.floor(Math.random() * 255)
+    this.scramble = function(targetRed, targetGreen, targetBlue, threshold) {
+        let limiter = 25
+        this.red = randomValue()
+        this.green = randomValue()
+        this.blue = randomValue()
+        // If our random value is too close to our target value, get a new random value.
+        // Limited to running 25 times. Otherwise if the color threshold is set too high, this would run forever.
+        for(let i=0; (Math.abs(this.red - targetRed)<threshold) && i<limiter; i++) {
+          this.red = randomValue()
+        }
+        for(let i=0; (Math.abs(this.green - targetGreen)<threshold) && i<limiter; i++) {
+          this.green = randomValue()
+        }
+        for(let i=0; (Math.abs(this.blue - targetBlue)<threshold) && i<limiter; i++) {
+          this.blue = randomValue()
+        }
         this.updateDisplay()
     }
-    this.scramble()
     this.hide = function() {
         this.display.classList.add("hidden")
     }
@@ -52,9 +63,17 @@ const boxClicked = function() {
     }
 }
 
-const rerollColors = function(array) {
+// Random number between 0 and 255
+const randomValue = function() {
+  return Math.floor(Math.random() * 255)
+}
+
+const rerollColors = function(array, myTarget, myThreshold) {
     for (let i = 0; i < array.length; i++) {
-        array[i].scramble()
+        array[i].scramble(myTarget.red,
+                          myTarget.green,
+                          myTarget.blue,
+                          myThreshold)
     }
 }
 
@@ -65,8 +84,8 @@ const revealAll = function(array) {
 }
 
 const resetGame = function() {
-    rerollColors(difficulty.current.boxes)
     myTargetNum.scramble()
+    rerollColors(difficulty.current.boxes, myTargetNum, difficulty.current.threshold)
     myTargetNum.colorBox(randomBox(difficulty.current.boxes))
     revealAll(difficulty.current.boxes)
 }
@@ -76,13 +95,13 @@ for (let i = 0; i < 6; i++) {
     allBoxes[i] = new colorButton("box" + i, document.querySelector("#c" + i))
 }
 
-// Hide all boxes. The boxes that will be visible are controlled by the difficulty setting
+// Hide all boxes of a given array. The boxes that will be visible are controlled by the difficulty setting
 const hideBoxes = function(array) {
     for(let i = 0; i < array.length; i++) {
         array[i].hide()
     }
 }
-hideBoxes(allBoxes)
+hideBoxes(allBoxes) // Hide all onscreen boxes. They will be revealed again based on the difficulty setting.
 
 // Create difficulty buttons
 let difficulty = {
@@ -101,7 +120,9 @@ let difficulty = {
               this.displayBtn.classList.remove("btn-primary")
           },
           max: 3,
-          boxes: []
+          boxes: [],
+          // Prevents other colors from being too close to our target color.
+          threshold: 50
       },
       normal: {
           displayBtn: document.querySelector("#normalBtn"),
@@ -116,7 +137,9 @@ let difficulty = {
               this.displayBtn.classList.remove("btn-primary")
           },
           max: 6,
-          boxes: []
+          boxes: [],
+          // Prevents other colors from being too close to our target color.
+          threshold: 25
       }
     }
 
@@ -202,5 +225,4 @@ let streak = {
 // Game defaults to normal difficulty
 difficulty.normal.activate()
 
-// Recolors one of the boxes onscreen to match the target number
-myTargetNum.colorBox(randomBox(difficulty.current.boxes))
+resetGame()
