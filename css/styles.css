@@ -93,6 +93,8 @@ h3 {
     background-color: rgb(255, 0, 0);
     width: 100%;
     border-radius: 6px;
+    backface-visibility: hidden;
+    transition: transform .75s ease-in-out;
 }
 
 .colorBox:hover {
@@ -100,6 +102,10 @@ h3 {
     cursor: hand;
     border: 4px solid #ffffff;
     box-shadow: 0 0 8pt 4pt #aaaaaa;
+}
+
+.shrinkOut {
+    transform: rotateY(180deg);
 }
 
 @media(max-width:767px) {
@@ -116,8 +122,4 @@ h3 {
         margin: 0 auto 40px;
         height: 125px;
     }
-}
-
-.hidden {
-    display: none;
 }

@@ -40,24 +40,20 @@ const colorButton = function(name, display) {
         this.updateDisplay()
     }
     this.hide = function() {
-        this.display.classList.add("hidden")
+        this.display.classList.add("shrinkOut")
     }
     this.show = function() {
-        this.display.classList.remove("hidden")
+        this.display.classList.remove("shrinkOut")
     }
     this.display.addEventListener("click", boxClicked.bind(this))
 }
 
 // Click handler for when an onscreen box is clicked
 const boxClicked = function() {
-    console.log(this.name + ": " + this.color())
-    console.log("Target: " + myTargetNum.color())
     if (this.color() === myTargetNum.color()) {
-        console.log("Correct!")
         resetGame()
         streak.add(1)
     } else {
-        console.log("Incorrect!")
         this.hide()
         streak.reset()
     }
